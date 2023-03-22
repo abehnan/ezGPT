@@ -23,14 +23,13 @@ You can prompt gpt direcly from your terminal by preprending your prompt with `g
 
 
 The average lifespan of a chimpanzee is between 40 to 50 years in the wild, and up to 60 years in captivity.
-
 ```
 
 ### Multi-line Inputs
 
 `ezGPT` also supports multiline inputs when executing the script without arguments or when responding.
 
-By default, `ezGPT` will send the request once three lines have been entered.
+By default, `ezGPT` will send the request once three empty lines have been entered.
 
 ```
 [anon:~]$ gpt
