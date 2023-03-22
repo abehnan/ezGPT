@@ -57,17 +57,13 @@ def send_request():
 def consume_response(response):
     content = json.loads(response.text)["choices"][0]["message"]["content"]
     conversation.append({"role": "assistant", "content": content})
-    print_response(content)
+    print(content)
 
 
 def print_ai_response_template():
     print("---")
     print("## AI")
     print("---")
-
-
-def print_response(content):
-    print(content)
 
 
 def respond():
