@@ -82,4 +82,6 @@ print("hello earth")
 
 ```
 
-Note conversations are currently cleared when the script exists. i.e. Permanent storage has not been implemented.
+Note conversations are currently cleared when the script exits.
+
+**i.e.** Permanent storage has not been implemented yet.
