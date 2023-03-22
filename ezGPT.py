@@ -8,6 +8,7 @@ import sys
 API_URL = "https://api.openai.com/v1/chat/completions"
 MODEL = "gpt-3.5-turbo"
 NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
+SYSTEM_MESSAGE = "You are a helpful assistant."
 TEMPERATURE = 1
 
 
@@ -69,7 +70,7 @@ def respond():
 
 
 if __name__ == "__main__":
-    conversation = []
+    conversation = [{"role": "system", "content": SYSTEM_MESSAGE}]
 
     if len(sys.argv) > 1:
         conversation.append({"role": "user", "content": ' '.join(sys.argv[1:])})
