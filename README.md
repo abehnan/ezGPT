@@ -17,10 +17,10 @@ You can prompt gpt direcly from your terminal by preprending your prompt with `g
 ```
 [anon:~/work/ezGPT]$ gpt what is the average lifespan of a chimpanzee
 ----------------------------------------------------
-                 ezGPT started.
+                  ezGPT started.
 ----------------------------------------------------
 ----------------------------------------------------
-                     AI
+                       AI
 ----------------------------------------------------
 The average lifespan of a chimpanzee is around 40-50 years in the wild and up to 60 years in captivity.
 ```
@@ -36,7 +36,7 @@ This is configurable by changing the `NUM_EMPTY_LINES_TO_SEND_REQUEST` variable.
 ```
 [anon:~/work/ezGPT]$ gpt
 ----------------------------------------------------
-                 ezGPT started.
+                  ezGPT started.
 ----------------------------------------------------
 
 ----------------------------------------------------
@@ -49,11 +49,11 @@ world
 
 
 ----------------------------------------------------
-               Sending request...
+                 Sending request...
 ----------------------------------------------------
 
 ----------------------------------------------------
-                     AI
+                       AI
 ----------------------------------------------------
 The code to print "hello world" in Python is:
 
@@ -69,11 +69,11 @@ to "hello earth"
 
 
 ----------------------------------------------------
-               Sending request...
+                 Sending request...
 ----------------------------------------------------
 
 ----------------------------------------------------
-                     AI
+                       AI
 ----------------------------------------------------
 To print "hello earth" instead of "hello world", you can simply modify the string argument passed to the `print()` function. Here's the updated code:
 
