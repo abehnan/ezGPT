@@ -17,12 +17,14 @@ You can prompt gpt direcly from your terminal by preprending your prompt with `g
 ```
 [anon:~/work/ezGPT]$ gpt what is the average lifespan of a chimpanzee
 ----------------------------------------------------
-                  ezGPT started.
+                   ezGPT started
 ----------------------------------------------------
 ----------------------------------------------------
-                       AI
+                         AI
 ----------------------------------------------------
-The average lifespan of a chimpanzee is around 40-50 years in the wild and up to 60 years in captivity.
+
+
+The average lifespan of a chimpanzee in the wild is around 40 to 45 years. However, in captivity, they can live up to 60 years or more.
 ```
 
 ### Multi-line Inputs
@@ -36,16 +38,15 @@ This is configurable by changing the `NUM_EMPTY_LINES_TO_SEND_REQUEST` variable.
 ```
 [anon:~/work/ezGPT]$ gpt
 ----------------------------------------------------
-                  ezGPT started.
+                   ezGPT started
 ----------------------------------------------------
 
 ----------------------------------------------------
-                      User
+                        User
 ----------------------------------------------------
 please
 print
-hello
-world
+hello world
 
 
 ----------------------------------------------------
@@ -53,19 +54,17 @@ world
 ----------------------------------------------------
 
 ----------------------------------------------------
-                       AI
+                         AI
 ----------------------------------------------------
-The code to print "hello world" in Python is:
-
-print("hello world")
+Hello world
 
 ----------------------------------------------------
-                      User
+                        User
 ----------------------------------------------------
-now
 change
 it
-to "hello earth"
+to
+hello earth
 
 
 ----------------------------------------------------
@@ -73,13 +72,9 @@ to "hello earth"
 ----------------------------------------------------
 
 ----------------------------------------------------
-                       AI
+                         AI
 ----------------------------------------------------
-To print "hello earth" instead of "hello world", you can simply modify the string argument passed to the `print()` function. Here's the updated code:
-
-
-print("hello earth")
-
+Hello earth
 ```
 
 Note conversations are currently cleared when the script exits.
