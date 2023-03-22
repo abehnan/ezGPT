@@ -62,8 +62,20 @@ def consume_response(response):
     print_response(content)
 
 
+def print_ai_response_template():
+    print("---")
+    print("## AI")
+    print("---")
+
+
 def print_response(content):
     print(content)
+
+
+def respond(conversation):
+    print_ai_response_template()
+    response = send_request(conversation)
+    consume_response(response)
 
 
 if __name__ == "__main__":
@@ -74,17 +86,8 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         conversation.append({"role": "user", "content": ' '.join(sys.argv[1:])})
-        print("---")
-        print("## AI")
-        print("---")
-        response = send_request(conversation)
-        consume_response(response)
+        respond(conversation)
 
     while True:
         conversation.append({"role": "user", "content": get_user_input()})
-        print("---")
-        print("## AI")
-        print("---")
-        response = send_request(conversation)
-        consume_response(response)
-
+        respond(conversation)
