@@ -26,10 +26,6 @@ def get_user_input():
             empty_count = 0
 
         if empty_count >= NUM_EMPTY_LINES_TO_SEND_REQUEST:
-            # print("---")
-            # print("Sending request...")
-            # print("---")
-            # print()
             break
 
         user_input += line + "\n"
