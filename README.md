@@ -16,9 +16,7 @@ You can prompt gpt direcly from your terminal by preprending your prompt with `g
 
 ```
 [anon:~]$ gpt what is the average lifespan of a chimpanzee
----
-# ezGPT started
----
+
 ---
 ## AI
 ---
@@ -32,15 +30,10 @@ The average lifespan of a chimpanzee is between 40 to 50 years in the wild, and 
 
 `ezGPT` also supports multiline inputs when executing the script without arguments or when responding.
 
-By default, `ezGPT` will send the request once two empty lines have been entered.
-
-This is configurable by changing the `NUM_EMPTY_LINES_TO_SEND_REQUEST` variable.
+By default, `ezGPT` will send the request once three lines have been entered.
 
 ```
 [anon:~]$ gpt
----
-# ezGPT started
----
 
 ---
 ## User
@@ -73,3 +66,12 @@ Hello GPT
 Note conversations are currently cleared when the script exits.
 
 **i.e.** Permanent storage has not been implemented yet.
+
+## Configuration
+
+The following values are configurable by changing the values at the beginning of the script.
+- `API_URL`
+- `MODEL`
+- `NUM_EMPTY_LINES_TO_SEND_REQUEST`
+- `SYSTEM_MESSAGE`
+- `TEMPERATURE`
