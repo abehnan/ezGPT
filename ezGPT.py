@@ -35,7 +35,7 @@ def get_user_input():
     return user_input
 
 
-def create_post_data(conversation):
+def create_post_data():
     data = {
         "model": MODEL,
         "messages": conversation,
@@ -44,12 +44,12 @@ def create_post_data(conversation):
     return json.dumps(data)
 
 
-def send_request(conversation):
+def send_request():
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
     }
-    data = create_post_data(conversation)
+    data = create_post_data()
     response = requests.post(API_URL, headers=headers, data=data)
     return response
 
@@ -70,9 +70,9 @@ def print_response(content):
     print(content)
 
 
-def respond(conversation):
+def respond():
     print_ai_response_template()
-    response = send_request(conversation)
+    response = send_request()
     consume_response(response)
 
 
@@ -81,8 +81,8 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         conversation.append({"role": "user", "content": ' '.join(sys.argv[1:])})
-        respond(conversation)
+        respond()
 
     while True:
         conversation.append({"role": "user", "content": get_user_input()})
-        respond(conversation)
+        respond()
