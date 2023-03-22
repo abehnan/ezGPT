@@ -5,7 +5,6 @@ import os
 import requests
 import sys
 
-API_URL = "https://api.openai.com/v1/chat/completions"
 MODEL = "gpt-3.5-turbo"
 NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
 SYSTEM_MESSAGE = "You are a helpful assistant."
@@ -51,7 +50,7 @@ def send_request():
         "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
     }
     data = create_post_data()
-    response = requests.post(API_URL, headers=headers, data=data)
+    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, data=data)
     return response
 
 

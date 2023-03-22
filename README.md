@@ -70,7 +70,6 @@ Note conversations are currently cleared when the script exits.
 ## Configuration
 
 The following values are configurable by changing the values at the beginning of the script.
-- `API_URL`
 - `MODEL`
 - `NUM_EMPTY_LINES_TO_SEND_REQUEST`
 - `SYSTEM_MESSAGE`
