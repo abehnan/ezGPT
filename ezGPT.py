@@ -12,7 +12,7 @@ TEMPERATURE = 1
 def get_user_input():
     print()
     print("----------------------------------------------------")
-    print("                      User")
+    print("                        User                        ")
     print("----------------------------------------------------")
     user_input = ""
     empty_count = 0
@@ -27,7 +27,7 @@ def get_user_input():
 
         if empty_count >= NUM_EMPTY_LINES_TO_SEND_REQUEST:
             print("----------------------------------------------------")
-            print("               Sending request...")
+            print("                 Sending request...                 ")
             print("----------------------------------------------------")
             print()
             break
@@ -64,7 +64,7 @@ def consume_response(response):
 
 def print_response(content):
     print("----------------------------------------------------")
-    print("                     AI")
+    print("                         AI                         ")
     print("----------------------------------------------------")
     print(content)
 
@@ -72,7 +72,7 @@ def print_response(content):
 if __name__ == "__main__":
     conversation = []
     print("----------------------------------------------------")
-    print("                 ezGPT started.")
+    print("                   ezGPT started                    ")
     print("----------------------------------------------------")
 
     if len(sys.argv) > 1:
