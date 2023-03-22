@@ -62,13 +62,9 @@ second word to 'GPT'
 Hello GPT
 ```
 
-Note conversations are currently cleared when the script exits.
-
-**i.e.** Permanent storage has not been implemented yet.
-
 ## Configuration
 
-The following values are configurable by changing the values at the beginning of the script.
+The following values are configurable by changing the values in the script:
 - `MODEL`
 - `NUM_EMPTY_LINES_TO_SEND_REQUEST`
 - `SYSTEM_MESSAGE`
