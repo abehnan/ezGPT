@@ -1,5 +1,11 @@
 # ezGPT
-This a simple terminal-based chatGPT chatbot.
+Welcome to the ezGPT GitHub project!
+
+This is a terminal-based chatbot that uses GPT technology to power its conversations.
+
+The purpose of this project is to provide users with a simple and easy-to-use chatbot that can help them in their day-to-day tasks or even just provide some fun conversation.
+
+This project was designed with simplicity in mind and is meant to be easily customizable and extendable. With just a few lines of code, you can alter the chatbot's behavior to fit your specific needs.
 
 ## Setup
 
