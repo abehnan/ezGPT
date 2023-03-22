@@ -56,7 +56,7 @@ def send_request(conversation):
     return response
 
 
-def consumeResponse(response):
+def consume_response(response):
     content = json.loads(response.text)["choices"][0]["message"]["content"]
     conversation.append({"role": "assistant", "content": content})
     print_response(content)
@@ -70,10 +70,7 @@ def print_response(content):
 
 
 if __name__ == "__main__":
-    conversation = [{
-        "role": "system",
-        "content": "You are a helpful programming assistant. You will minimize prose and verbosity in non-code answers."
-    }]
+    conversation = []
     print("----------------------------------------------------")
     print("                 ezGPT started.")
     print("----------------------------------------------------")
@@ -81,10 +78,10 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         conversation.append({"role": "user", "content": ' '.join(sys.argv[1:])})
         response = send_request(conversation)
-        consumeResponse(response)
+        consume_response(response)
 
     while True:
         conversation.append({"role": "user", "content": get_user_input()})
         response = send_request(conversation)
-        consumeResponse(response)
+        consume_response(response)
 
