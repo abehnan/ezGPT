@@ -60,14 +60,10 @@ def consume_response(response):
     print(content)
 
 
-def print_ai_response_template():
+def respond():
     print("---")
     print("## AI")
     print("---")
-
-
-def respond():
-    print_ai_response_template()
     response = send_request()
     consume_response(response)
 
