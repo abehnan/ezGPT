@@ -12,7 +12,7 @@ alias gpt='python /path/to/cloned/repository/ezGPT.py'
 
 ## Usage
 
-You can prompt gpt direcly from your terminal by preprending your prompt with `gpt.`
+You can prompt gpt direcly from your terminal by preprending your prompt with `gpt`.
 
 ```
 [anon:~/work/ezGPT]$ gpt what is the average lifespan of a chimpanzee
