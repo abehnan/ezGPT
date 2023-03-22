@@ -5,15 +5,15 @@ import os
 import requests
 import sys
 
-NUM_EMPTY_LINES_TO_SEND_REQUEST = 2
+NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
 TEMPERATURE = 1
 
 
 def get_user_input():
     print()
-    print("----------------------------------------------------")
-    print("                        User                        ")
-    print("----------------------------------------------------")
+    print("---")
+    print("## User")
+    print("---")
     user_input = ""
     empty_count = 0
 
@@ -26,10 +26,10 @@ def get_user_input():
             empty_count = 0
 
         if empty_count >= NUM_EMPTY_LINES_TO_SEND_REQUEST:
-            print("----------------------------------------------------")
-            print("                 Sending request...                 ")
-            print("----------------------------------------------------")
-            print()
+            # print("---")
+            # print("Sending request...")
+            # print("---")
+            # print()
             break
 
         user_input += line + "\n"
@@ -63,25 +63,28 @@ def consume_response(response):
 
 
 def print_response(content):
-    print("----------------------------------------------------")
-    print("                         AI                         ")
-    print("----------------------------------------------------")
     print(content)
 
 
 if __name__ == "__main__":
     conversation = []
-    print("----------------------------------------------------")
-    print("                   ezGPT started                    ")
-    print("----------------------------------------------------")
+    print("---")
+    print("# ezGPT started")
+    print("---")
 
     if len(sys.argv) > 1:
         conversation.append({"role": "user", "content": ' '.join(sys.argv[1:])})
+        print("---")
+        print("## AI")
+        print("---")
         response = send_request(conversation)
         consume_response(response)
 
     while True:
         conversation.append({"role": "user", "content": get_user_input()})
+        print("---")
+        print("## AI")
+        print("---")
         response = send_request(conversation)
         consume_response(response)
 
