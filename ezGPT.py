@@ -5,6 +5,8 @@ import os
 import requests
 import sys
 
+API_URL = "https://api.openai.com/v1/chat/completions"
+MODEL = "gpt-3.5-turbo"
 NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
 TEMPERATURE = 1
 
@@ -35,7 +37,7 @@ def get_user_input():
 
 def create_post_data(conversation):
     data = {
-        "model": "gpt-3.5-turbo",
+        "model": MODEL,
         "messages": conversation,
         "temperature": TEMPERATURE
     }
@@ -48,7 +50,7 @@ def send_request(conversation):
         "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
     }
     data = create_post_data(conversation)
-    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, data=data)
+    response = requests.post(API_URL, headers=headers, data=data)
     return response
 
 
@@ -76,9 +78,6 @@ def respond(conversation):
 
 if __name__ == "__main__":
     conversation = []
-    print("---")
-    print("# ezGPT started")
-    print("---")
 
     if len(sys.argv) > 1:
         conversation.append({"role": "user", "content": ' '.join(sys.argv[1:])})
