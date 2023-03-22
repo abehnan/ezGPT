@@ -55,9 +55,9 @@ def send_request():
 
 
 def consume_response(response):
-    content = json.loads(response.text)["choices"][0]["message"]["content"]
-    conversation.append({"role": "assistant", "content": content})
-    print(content)
+    message = json.loads(response.text)["choices"][0]["message"]
+    conversation.append(message)
+    print(message["content"])
 
 
 def respond():
