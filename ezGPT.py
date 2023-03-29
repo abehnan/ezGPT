@@ -80,8 +80,7 @@ def send_request():
         "Content-Type": "application/json",
         "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
     }
-    data = create_post_data()
-    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, data=data)
+    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, data=create_post_data())
     return response
 
 
@@ -104,11 +103,10 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         user_input = ' '.join(sys.argv[1:])
-        log_file = create_log_file()
     else:
         user_input = get_user_input()
-        log_file = create_log_file()
 
+    log_file = create_log_file()
     log_section("User")
     log(user_input + "\n")
     conversation.append({"role": "user", "content": user_input})
