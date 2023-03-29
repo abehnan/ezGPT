@@ -18,13 +18,13 @@ def setup_log_file():
     if not os.path.exists(script_dir + "/logs"):
         os.makedirs("logs")
 
-    clean_input = user_input[:50]
-    clean_input = "".join([c for c in clean_input if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
-    clean_input = clean_input.replace(' ', '_')
+    file_name = user_input[:50]
+    file_name = "".join([c for c in file_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
+    file_name = file_name.replace(' ', '_')
+    file_name = datetime.now().strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
 
-    file_name = datetime.now().strftime("%Y_%m_%d__%H_%M_%S_") + clean_input + ".md"
     file = open(script_dir + '/logs/' + file_name, "a")
-    file.write("# " + datetime.now().strftime("%Y/%m/%d") + " - " + user_input + "\n")
+    file.write("# " + datetime.now().strftime("%Y/%m/%d") + " - " + user_input[:100].replace("\n", "") + "\n")
     return file
 
 
