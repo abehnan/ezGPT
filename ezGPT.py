@@ -24,26 +24,27 @@ def setup_log_file():
 
     file_name = datetime.now().strftime("%Y_%m_%d__%H_%M_%S_") + clean_input + ".md"
     file = open(script_dir + '/logs/' + file_name, "a")
-    file.write("# " + file_name + "\n")
+    file.write("# " + datetime.now().strftime("%Y/%m/%d") + " - " + user_input + "\n")
     return file
 
 
-def log(message):
-    print(message)
+def log(message, to_stdout=True, to_file=True):
+    if to_stdout:
+        print(message)
 
-    if log_file:
+    if to_file and log_file:
         log_file.write(message + '\n')
 
 
-def log_user_input_template():
-    log("\n")
+def log_section(role):
     log("---")
-    log("## User")
+    log("## " + role)
     print("---")  # looks nicer without bottom separator in markdown viewers
 
 
 def get_user_input():
-    log_user_input_template()
+    log("\n")
+    log_section("User")
     result = ""
     empty_count = 0
 
@@ -60,6 +61,7 @@ def get_user_input():
 
         result += line + "\n"
 
+    log(result, False)
     return result
 
 
@@ -89,9 +91,7 @@ def consume_response(response):
 
 
 def respond():
-    log("---")
-    log("## AI")
-    print("---")  # looks nicer without bottom separator in markdown viewers
+    log_section("AI")
     response = send_request()
     consume_response(response)
 
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         user_input = get_user_input()
         log_file = setup_log_file()
 
-    log_user_input_template()
+    log_section("User")
     log(user_input + "\n")
     conversation.append({"role": "user", "content": user_input})
     respond()
