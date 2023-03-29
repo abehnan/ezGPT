@@ -12,7 +12,7 @@ SYSTEM_MESSAGE = "You are a helpful assistant."
 TEMPERATURE = 1
 
 
-def setup_log_file():
+def create_log_file():
     script_dir = os.path.dirname(os.path.realpath(__file__))
 
     if not os.path.exists(script_dir + "/logs"):
@@ -21,10 +21,11 @@ def setup_log_file():
     file_name = user_input[:50]
     file_name = "".join([c for c in file_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
     file_name = file_name.replace(' ', '_')
-    file_name = datetime.now().strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
+    now = datetime.now()
+    file_name = now.strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
 
     file = open(script_dir + '/logs/' + file_name, "a")
-    file.write("# " + datetime.now().strftime("%Y/%m/%d") + " - " + user_input[:100].replace("\n", "") + "\n")
+    file.write("# " + now.strftime("%Y/%m/%d") + " - " + user_input[:100].replace("\n", "") + "\n")
     return file
 
 
@@ -103,10 +104,10 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         user_input = ' '.join(sys.argv[1:])
-        log_file = setup_log_file()
+        log_file = create_log_file()
     else:
         user_input = get_user_input()
-        log_file = setup_log_file()
+        log_file = create_log_file()
 
     log_section("User")
     log(user_input + "\n")
