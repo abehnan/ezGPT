@@ -75,3 +75,7 @@ The following values are configurable by changing the values in the script:
 - `NUM_EMPTY_LINES_TO_SEND_REQUEST`
 - `SYSTEM_MESSAGE`
 - `TEMPERATURE`
+
+## Logging
+
+All conversations are stored in `/path/to/cloned/repository/logs` as separate markdown files.
