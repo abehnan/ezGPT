@@ -37,10 +37,12 @@ def log(message, to_stdout=True, to_file=True):
         log_file.write(message + '\n')
 
 
-def log_section(role):
-    log("---")
-    log("## " + role)
-    print("---")  # looks nicer without bottom separator in markdown viewers
+def log_section(role, to_stdout=True, to_file=True):
+    log("---", to_stdout, to_file)
+    log("## " + role, to_stdout, to_file)
+
+    if to_stdout:
+        print("---")  # looks nicer without bottom separator in markdown viewers
 
 
 def get_user_input():
@@ -107,8 +109,8 @@ if __name__ == "__main__":
         user_input = get_user_input()
 
     log_file = create_log_file()
-    log_section("User")
-    log(user_input + "\n")
+    log_section("User", False)
+    log(user_input, False)
     conversation.append({"role": "user", "content": user_input})
     respond()
 
