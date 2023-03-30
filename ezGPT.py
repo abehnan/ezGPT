@@ -29,17 +29,17 @@ def create_log_file():
     return file
 
 
-def log(message, to_stdout=True, to_file=True):
+def log(message, to_stdout=True):
     if to_stdout:
         print(message)
 
-    if to_file and log_file:
+    if log_file:
         log_file.write(message + '\n')
 
 
-def log_section(role, to_stdout=True, to_file=True):
-    log("---", to_stdout, to_file)
-    log("## " + role, to_stdout, to_file)
+def log_section(role, to_stdout=True):
+    log("---", to_stdout)
+    log("## " + role, to_stdout)
 
     if to_stdout:
         print("---")  # looks nicer without bottom separator in markdown viewers
