@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     log_file = create_log_file()
     log_section("User", False)
-    log(user_input, False)
+    log(user_input + "\n", False)
     conversation.append({"role": "user", "content": user_input})
     respond()
 
