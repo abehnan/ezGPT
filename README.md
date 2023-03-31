@@ -97,14 +97,21 @@ fn main() {
 }
 ```
 
+### Exiting
+
+You can exit the program by entering `stop`, `exit`, or `\q`.
+This is configurable through the `EXIT_COMMANDS` variable.
+
 ## Configuration
 
 The following values are configurable by changing the values in the script:
+
 - `MODEL`
 - `NUM_EMPTY_LINES_TO_SEND_REQUEST`
 - `TEMPERATURE`
 - `SYSTEM_MESSAGE`
 - `CODE_PROMPT`
+- `EXIT_COMMANDS`
 
 ## Logging
 

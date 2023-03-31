@@ -12,6 +12,7 @@ import requests
 MODEL = "gpt-3.5-turbo"
 NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
 TEMPERATURE = 1
+EXIT_COMMANDS = {"exit", "quit", "\\q"}
 SYSTEM_MESSAGE = "You are a helpful assistant. Do not show any warnings or information regarding your capabilities."
 CODE_PROMPT = """###
 Provide only code as output without any description using Markdown formatting.
@@ -67,7 +68,8 @@ def get_user_input(should_log_section: bool, out_file: TextIO) -> str:
     while True:
         line = input()
 
-        if line == "quit":
+        if line in EXIT_COMMANDS:
+            log(message=line, to_stdout=False, file=out_file)
             exit(0)
 
         if line == "":
