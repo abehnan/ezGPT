@@ -37,8 +37,6 @@ $ gpt what is the average lifespan of a chimpanzee
 ---
 ## AI
 ---
-
-
 The average lifespan of a chimpanzee is between 40 to 50 years in the wild, and up to 60 years in captivity.
 ```
 
