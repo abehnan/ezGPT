@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!python
 
 import io
 import json
@@ -66,6 +66,9 @@ def get_user_input(should_log_section: bool, out_file: TextIO) -> str:
 
     while True:
         line = input()
+
+        if line == "quit":
+            exit(0)
 
         if line == "":
             empty_count += 1
