@@ -11,7 +11,7 @@ NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
 TEMPERATURE = 1
 SYSTEM_MESSAGE = "You are a helpful assistant. Do not show any warnings or information regarding your capabilities."
 CODE_PROMPT = """###
-Provide only code as output without any description using Markdown formatting..
+Provide only code as output without any description using Markdown formatting.
 If there is a lack of details, provide most logical solution.
 Use the latest version of the programming language unless specified.
 Your solution must have optimal time complexity unless optimal space complexity was requested.
