@@ -3,6 +3,8 @@
 from datetime import datetime
 import json
 import os
+from typing import TextIO
+
 import requests
 import sys
 
@@ -22,13 +24,13 @@ Prompt: {prompt}
 Code:"""
 
 
-def create_log_file():
+def create_log_file(first_message: str) -> TextIO:
     script_dir = os.path.dirname(os.path.realpath(__file__))
 
     if not os.path.exists(script_dir + "/logs"):
         os.makedirs("logs")
 
-    file_name = user_input[:50]
+    file_name = first_message[:50]
     file_name = "".join([c for c in file_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
     file_name = file_name.replace(' ', '_')
     now = datetime.now()
@@ -39,25 +41,25 @@ def create_log_file():
     return file
 
 
-def log(message, to_stdout=True):
+def log(message: str, to_stdout: bool = True, file: TextIO = None) -> None:
     if to_stdout:
         print(message)
 
-    if log_file:
-        log_file.write(message + '\n')
+    if file:
+        file.write(message + '\n')
 
 
-def log_section(role, to_stdout=True):
-    log("---", to_stdout)
-    log("## " + role, to_stdout)
+def log_section(role: str, to_stdout: bool = True, file: TextIO = None) -> None:
+    log(message="---", to_stdout=to_stdout, file=file)
+    log(message="## " + role, to_stdout=to_stdout, file=file)
 
     if to_stdout:
         print("---")  # looks nicer without bottom separator in markdown viewers
 
 
-def get_user_input():
-    log("\n")
-    log_section("User")
+def get_user_input(to_stdout: bool = True, out_file: TextIO = None) -> str:
+    log(message="\n", to_stdout=to_stdout, file=out_file)
+    log_section(role="User", to_stdout=to_stdout, file=out_file)
     result = ""
     empty_count = 0
 
@@ -74,41 +76,44 @@ def get_user_input():
 
         result += line + "\n"
 
-    log(result, False)
+    log(message=result, to_stdout=False, file=out_file)
     return result
 
 
-def create_post_data():
+def create_post_data(messages: list[dict[str, str]]) -> json:
     data = {
         "model": MODEL,
-        "messages": conversation,
+        "messages": messages,
         "temperature": TEMPERATURE
     }
     return json.dumps(data)
 
 
-def send_request():
+def send_request(messages: list[dict[str, str]]) -> requests.Response:
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
     }
-    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, data=create_post_data())
+    response = requests.post(
+        "https://api.openai.com/v1/chat/completions",
+        headers=headers,
+        data=create_post_data(messages=messages))
     return response
 
 
-def consume_response(response):
+def consume_response(response: requests.Response) -> None:
     message = json.loads(response.text)["choices"][0]["message"]
     conversation.append(message)
-    log(message["content"])
+    log(message=message["content"])
 
 
-def respond():
+def respond(messages: list[dict[str, str]]) -> None:
     log_section("AI")
-    response = send_request()
-    consume_response(response)
+    response = send_request(messages=messages)
+    consume_response(response=response)
 
 
-def add_prompt_to_conversation(prompt):
+def add_prompt_to_conversation(prompt: str) -> None:
     if user_input.startswith("-c"):
         conversation.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt)})
     else:
@@ -125,12 +130,13 @@ if __name__ == "__main__":
     else:
         user_input = get_user_input()
 
-    log_file = create_log_file()
-    log_section("User", False)
-    log(user_input + "\n", False)
-    add_prompt_to_conversation(user_input)
-    respond()
+    log_file = create_log_file(first_message=user_input)
+    log_section(role="User", to_stdout=False, file=log_file)
+    log(message=user_input + "\n", to_stdout=False, file=log_file)
+
+    add_prompt_to_conversation(prompt=user_input)
+    respond(messages=conversation)
 
     while True:
-        add_prompt_to_conversation(get_user_input())
-        respond()
+        add_prompt_to_conversation(get_user_input(to_stdout=True, out_file=log_file))
+        respond(messages=conversation)
