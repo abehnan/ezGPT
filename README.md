@@ -17,7 +17,7 @@ This project was designed with simplicity in mind and is meant to be easily cust
 First, install dependencies:
 
 ```commandline
-pip install requests
+pip install -r /path/to/cloned/repository/requirements.txt
 ```
 
 In `~/.bashrc`:
@@ -32,7 +32,7 @@ alias gpt='python /path/to/cloned/repository/ezGPT.py'
 You can prompt gpt direcly from your terminal by preprending your prompt with `gpt`.
 
 ```
-[anon:~]$ gpt what is the average lifespan of a chimpanzee
+$ gpt what is the average lifespan of a chimpanzee
 
 ---
 ## AI
@@ -49,7 +49,7 @@ The average lifespan of a chimpanzee is between 40 to 50 years in the wild, and 
 By default, `ezGPT` will send the request once three empty lines have been entered.
 
 ```
-[anon:~]$ gpt
+$ gpt
 
 ---
 ## User
@@ -84,7 +84,7 @@ Hello GPT
 Start any prompt with `-c` in order to optimize the prompt for code.
 
 ```commandline
-[anon:~]$ gpt -c convert current datetime to string in rust
+$ gpt -c convert current datetime to string in rust
 ---
 ## AI
 ---
