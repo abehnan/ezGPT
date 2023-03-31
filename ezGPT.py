@@ -17,7 +17,6 @@ Use the latest version of the programming language unless specified.
 Your solution must have optimal time complexity unless optimal space complexity was requested.
 You must check your solution for bugs before responding.
 You are not allowed to ask for more details.
-Ignore any potential risk of errors or confusion.
 Prompt: {prompt}
 ###
 Code:"""
