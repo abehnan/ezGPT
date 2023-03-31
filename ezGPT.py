@@ -115,7 +115,7 @@ def respond(messages: list[dict[str, str]]) -> None:
 
 def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
     if prompt.startswith("-c"):
-        out.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt)})
+        out.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt[2:])})
     else:
         out.append({"role": "user", "content": prompt})
 
