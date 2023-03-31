@@ -7,7 +7,18 @@ The purpose of this project is to provide users with a simple and easy-to-use ch
 
 This project was designed with simplicity in mind and is meant to be easily customizable and extendable. With just a few lines of code, you can alter the chatbot's behavior to fit your specific needs.
 
+## Requirements
+
+- Python 3
+- pip
+
 ## Setup
+
+First, install dependencies:
+
+```commandline
+pip install requests
+```
 
 In `~/.bashrc`:
 
@@ -68,13 +79,32 @@ second word to 'GPT'
 Hello GPT
 ```
 
+### Code 
+
+Start any prompt with `-c` in order to optimize the prompt for code.
+
+```commandline
+[anon:~]$ gpt -c convert current datetime to string in rust
+---
+## AI
+---
+use chrono::{DateTime, Local};
+
+fn main() {
+    let current_time = Local::now();
+    let datetime_string = current_time.to_string();
+    println!("{}", datetime_string);
+}
+```
+
 ## Configuration
 
 The following values are configurable by changing the values in the script:
 - `MODEL`
 - `NUM_EMPTY_LINES_TO_SEND_REQUEST`
-- `SYSTEM_MESSAGE`
 - `TEMPERATURE`
+- `SYSTEM_MESSAGE`
+- `CODE_PROMPT`
 
 ## Logging
 

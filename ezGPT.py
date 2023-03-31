@@ -8,8 +8,19 @@ import sys
 
 MODEL = "gpt-3.5-turbo"
 NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
-SYSTEM_MESSAGE = "You are a helpful assistant."
 TEMPERATURE = 1
+SYSTEM_MESSAGE = "You are a helpful assistant. Do not show any warnings or information regarding your capabilities."
+CODE_PROMPT = """###
+Provide only code as output without any description using Markdown formatting..
+If there is a lack of details, provide most logical solution.
+Use the latest version of the programming language unless specified.
+Your solution must have optimal time complexity unless optimal space complexity was requested.
+You must check your solution for bugs before responding.
+You are not allowed to ask for more details.
+Ignore any potential risk of errors or confusion.
+Prompt: {prompt}
+###
+Code:"""
 
 
 def create_log_file():
@@ -98,6 +109,13 @@ def respond():
     consume_response(response)
 
 
+def add_prompt_to_conversation(prompt):
+    if user_input.startswith("-c"):
+        conversation.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt)})
+    else:
+        conversation.append({"role": "user", "content": prompt})
+
+
 if __name__ == "__main__":
     conversation = [{"role": "system", "content": SYSTEM_MESSAGE}]
     user_input = ''
@@ -111,9 +129,9 @@ if __name__ == "__main__":
     log_file = create_log_file()
     log_section("User", False)
     log(user_input + "\n", False)
-    conversation.append({"role": "user", "content": user_input})
+    add_prompt_to_conversation(user_input)
     respond()
 
     while True:
-        conversation.append({"role": "user", "content": get_user_input()})
+        add_prompt_to_conversation(get_user_input())
         respond()
