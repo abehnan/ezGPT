@@ -108,7 +108,12 @@ def send_request(messages: list[dict[str, str]]) -> requests.Response:
 
 
 def consume_response(response: requests.Response, out_messages: list[dict[str, str]], out_file: TextIO) -> None:
-    message = json.loads(response.text)["choices"][0]["message"]
+    try:
+        message = json.loads(response.text)["choices"][0]["message"]
+    except KeyError as _:
+        log("An error occurred when parsing the response.", to_stdout=True, file=out_file)
+        exit(-1)
+
     out_messages.append(message)
     log(message=message["content"], to_stdout=True, file=out_file)
 
