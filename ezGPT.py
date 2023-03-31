@@ -108,7 +108,7 @@ def consume_response(response: requests.Response) -> None:
 
 
 def respond(messages: list[dict[str, str]]) -> None:
-    log_section("AI")
+    log_section(role="AI")
     response = send_request(messages=messages)
     consume_response(response=response)
 
