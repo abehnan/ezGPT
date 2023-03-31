@@ -42,7 +42,9 @@ The average lifespan of a chimpanzee is between 40 to 50 years in the wild, and 
 
 ### Multi-line Inputs
 
-`ezGPT` also supports multiline inputs when executing the script without arguments or when responding.
+`ezGPT` supports multi-line inputs when executing the script without arguments.
+
+It also supports multi-line inputs when responding to a previous answer.
 
 By default, `ezGPT` will send the request once three empty lines have been entered.
 
