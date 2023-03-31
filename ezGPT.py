@@ -57,9 +57,9 @@ def log_section(role: str, to_stdout: bool = True, file: TextIO = None) -> None:
         print("---")  # looks nicer without bottom separator in markdown viewers
 
 
-def get_user_input(to_stdout: bool = True, out_file: TextIO = None) -> str:
-    log(message="\n", to_stdout=to_stdout, file=out_file)
-    log_section(role="User", to_stdout=to_stdout, file=out_file)
+def get_user_input(should_log_section: bool = True, out_file: TextIO = None) -> str:
+    log(message="\n", to_stdout=should_log_section, file=out_file)
+    log_section(role="User", to_stdout=should_log_section, file=out_file)
     result = ""
     empty_count = 0
 
@@ -138,5 +138,5 @@ if __name__ == "__main__":
     respond(messages=conversation)
 
     while True:
-        add_prompt_to_conversation(get_user_input(to_stdout=True, out_file=log_file), out=conversation)
+        add_prompt_to_conversation(get_user_input(should_log_section=True, out_file=log_file), out=conversation)
         respond(messages=conversation)
