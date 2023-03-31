@@ -92,7 +92,7 @@ def create_post_data(messages: list[dict[str, str]]) -> json:
         "messages": messages,
         "temperature": TEMPERATURE
     }
-    return json.dumps(data)
+    return json.dumps(obj=data)
 
 
 def send_request(messages: list[dict[str, str]]) -> requests.Response:
@@ -101,7 +101,7 @@ def send_request(messages: list[dict[str, str]]) -> requests.Response:
         "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
     }
     response = requests.post(
-        "https://api.openai.com/v1/chat/completions",
+        url="https://api.openai.com/v1/chat/completions",
         headers=headers,
         data=create_post_data(messages=messages))
     return response
@@ -111,7 +111,7 @@ def consume_response(response: requests.Response, out_messages: list[dict[str, s
     try:
         message = json.loads(response.text)["choices"][0]["message"]
     except KeyError as _:
-        log("An error occurred when parsing the response.", to_stdout=True, file=out_file)
+        log(message="An error occurred when parsing the response.", to_stdout=True, file=out_file)
         exit(-1)
 
     out_messages.append(message)
