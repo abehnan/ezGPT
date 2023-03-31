@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import io
 import json
 import os
 import sys
@@ -41,7 +42,7 @@ def create_log_file(first_message: str) -> TextIO:
     return file
 
 
-def log(message: str, to_stdout: bool = True, file: TextIO = None) -> None:
+def log(message: str, to_stdout: bool, file: TextIO) -> None:
     if to_stdout:
         print(message)
 
@@ -49,7 +50,7 @@ def log(message: str, to_stdout: bool = True, file: TextIO = None) -> None:
         file.write(message + '\n')
 
 
-def log_section(role: str, to_stdout: bool = True, file: TextIO = None) -> None:
+def log_section(role: str, to_stdout: bool, file: TextIO) -> None:
     log(message="---", to_stdout=to_stdout, file=file)
     log(message="## " + role, to_stdout=to_stdout, file=file)
 
@@ -57,7 +58,7 @@ def log_section(role: str, to_stdout: bool = True, file: TextIO = None) -> None:
         print("---")  # looks nicer without bottom separator in markdown viewers
 
 
-def get_user_input(should_log_section: bool = True, out_file: TextIO = None) -> str:
+def get_user_input(should_log_section: bool, out_file: TextIO) -> str:
     log(message="\n", to_stdout=should_log_section, file=out_file)
     log_section(role="User", to_stdout=should_log_section, file=out_file)
     result = ""
@@ -128,7 +129,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         user_input = ' '.join(sys.argv[1:])
     else:
-        user_input = get_user_input()
+        user_input = get_user_input(should_log_section=True, out_file=io.StringIO())
 
     log_file = create_log_file(first_message=user_input)
     log_section(role="User", to_stdout=False, file=log_file)
