@@ -101,16 +101,16 @@ def send_request(messages: list[dict[str, str]]) -> requests.Response:
     return response
 
 
-def consume_response(response: requests.Response, out: list[dict[str, str]]) -> None:
+def consume_response(response: requests.Response, out_messages: list[dict[str, str]], out_file: TextIO) -> None:
     message = json.loads(response.text)["choices"][0]["message"]
-    out.append(message)
-    log(message=message["content"])
+    out_messages.append(message)
+    log(message=message["content"], to_stdout=True, file=out_file)
 
 
-def respond(messages: list[dict[str, str]]) -> None:
-    log_section(role="AI")
+def respond(messages: list[dict[str, str]], out_file: TextIO) -> None:
+    log_section(role="AI", to_stdout=True, file=out_file)
     response = send_request(messages=messages)
-    consume_response(response=response, out=messages)
+    consume_response(response=response, out_messages=messages, out_file=out_file)
 
 
 def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
@@ -135,8 +135,8 @@ if __name__ == "__main__":
     log(message=user_input + "\n", to_stdout=False, file=log_file)
 
     add_prompt_to_conversation(prompt=user_input, out=conversation)
-    respond(messages=conversation)
+    respond(messages=conversation, out_file=log_file)
 
     while True:
         add_prompt_to_conversation(get_user_input(should_log_section=True, out_file=log_file), out=conversation)
-        respond(messages=conversation)
+        respond(messages=conversation, out_file=log_file)
