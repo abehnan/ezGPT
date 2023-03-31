@@ -37,7 +37,7 @@ def create_log_file(first_message: str) -> TextIO:
     file_name = now.strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
 
     file = open(script_dir + '/logs/' + file_name, "a")
-    file.write("# " + now.strftime("%Y/%m/%d") + " - " + user_input[:100].replace("\n", "") + "\n")
+    file.write("# " + now.strftime("[%Y/%m/%d] ") + user_input[:100].replace("\n", "") + "\n")
     return file
 
 
