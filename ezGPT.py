@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
-from datetime import datetime
 import json
 import os
+import sys
+from datetime import datetime
 from typing import TextIO
 
 import requests
-import sys
 
 MODEL = "gpt-3.5-turbo"
 NUM_EMPTY_LINES_TO_SEND_REQUEST = 3
@@ -138,5 +138,5 @@ if __name__ == "__main__":
     respond(messages=conversation)
 
     while True:
-        add_prompt_to_conversation(get_user_input(to_stdout=True, out_file=log_file))
+        add_prompt_to_conversation(get_user_input(to_stdout=True, out_file=log_file), out=conversation)
         respond(messages=conversation)
