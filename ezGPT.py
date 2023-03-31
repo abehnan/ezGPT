@@ -37,7 +37,7 @@ def create_log_file(first_message: str) -> TextIO:
     file_name = now.strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
 
     file = open(script_dir + '/logs/' + file_name, "a")
-    file.write("# " + now.strftime("[%Y/%m/%d] ") + user_input[:100].replace("\n", "") + "\n")
+    file.write("# " + now.strftime("[%Y/%m/%d] ") + first_message[:100].replace("\n", "") + "\n")
     return file
 
 
@@ -101,23 +101,23 @@ def send_request(messages: list[dict[str, str]]) -> requests.Response:
     return response
 
 
-def consume_response(response: requests.Response) -> None:
+def consume_response(response: requests.Response, out: list[dict[str, str]]) -> None:
     message = json.loads(response.text)["choices"][0]["message"]
-    conversation.append(message)
+    out.append(message)
     log(message=message["content"])
 
 
 def respond(messages: list[dict[str, str]]) -> None:
     log_section(role="AI")
     response = send_request(messages=messages)
-    consume_response(response=response)
+    consume_response(response=response, out=messages)
 
 
-def add_prompt_to_conversation(prompt: str) -> None:
-    if user_input.startswith("-c"):
-        conversation.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt)})
+def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
+    if prompt.startswith("-c"):
+        out.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt)})
     else:
-        conversation.append({"role": "user", "content": prompt})
+        out.append({"role": "user", "content": prompt})
 
 
 if __name__ == "__main__":
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     log_section(role="User", to_stdout=False, file=log_file)
     log(message=user_input + "\n", to_stdout=False, file=log_file)
 
-    add_prompt_to_conversation(prompt=user_input)
+    add_prompt_to_conversation(prompt=user_input, out=conversation)
     respond(messages=conversation)
 
     while True:
