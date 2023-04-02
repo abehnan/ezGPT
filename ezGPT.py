@@ -26,38 +26,35 @@ Prompt: {prompt}
 Code:"""
 
 
-def create_log_file(first_message: str) -> TextIO:
-    file_name = first_message[:50]
-    file_name = "".join([c for c in file_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
-    file_name = file_name.replace(' ', '_')
-    now = datetime.now()
-    file_name = now.strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
-
+def create_log_file() -> TextIO:
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    file = open(script_dir + '/logs/' + file_name, "a")
-    file.write("# " + now.strftime("[%Y/%m/%d] ") + first_message[:100].replace("\n", "") + "\n")
+    file_path = script_dir + '/logs/' + "log.md"
+
+    if not os.path.exists(file_path):
+        with open(file_path, 'w') as f:
+            f.write('# ezGPT Log\n')
+
+    file = open(file_path, "a")
+
     return file
 
 
-def log(message: str, to_stdout: bool, file: TextIO) -> None:
-    if to_stdout:
-        print(message)
+def log_message(message: str, file: TextIO) -> None:
+    print(message)
 
     if file:
         file.write(message + '\n')
 
 
-def log_section(role: str, to_stdout: bool, file: TextIO) -> None:
-    log(message="---", to_stdout=to_stdout, file=file)
-    log(message="## " + role, to_stdout=to_stdout, file=file)
-
-    if to_stdout:
-        print("---")  # looks nicer without bottom separator in markdown viewers
+def log_section(role: str, file: TextIO) -> None:
+    log_message(message="---", file=file)
+    log_message(message="### " + role, file=file)
+    print("---")  # looks nicer without bottom separator in markdown viewers
 
 
-def get_user_input(should_log_section: bool, out_file: TextIO) -> str:
-    log(message="\n", to_stdout=should_log_section, file=out_file)
-    log_section(role="User", to_stdout=should_log_section, file=out_file)
+def get_user_input(log: TextIO) -> str:
+    log_message(message="\n", file=log)
+    log_section(role="User", file=log)
     result = ""
     empty_count = 0
 
@@ -65,7 +62,7 @@ def get_user_input(should_log_section: bool, out_file: TextIO) -> str:
         line = input()
 
         if line in EXIT_COMMANDS:
-            log(message=line, to_stdout=False, file=out_file)
+            log.write(line + '\n')
             exit(0)
 
         if line == "":
@@ -78,7 +75,7 @@ def get_user_input(should_log_section: bool, out_file: TextIO) -> str:
 
         result += line + "\n"
 
-    log(message=result, to_stdout=False, file=out_file)
+    log.write(result + '\n')
     return result
 
 
@@ -88,7 +85,7 @@ def create_post_data(messages: list[dict[str, str]]) -> json:
         "messages": messages,
         "temperature": TEMPERATURE
     }
-    return json.dumps(obj=data)
+    return json.dumps(data)
 
 
 def send_request(messages: list[dict[str, str]]) -> requests.Response:
@@ -103,21 +100,21 @@ def send_request(messages: list[dict[str, str]]) -> requests.Response:
     return response
 
 
-def consume_response(response: requests.Response, out_messages: list[dict[str, str]], out_file: TextIO) -> None:
+def consume_response(response: requests.Response, out_messages: list[dict[str, str]], log: TextIO) -> None:
     try:
         message = json.loads(response.text)["choices"][0]["message"]
     except KeyError as _:
-        log(message="An error occurred when parsing the response.", to_stdout=True, file=out_file)
+        log_message(message="An error occurred when parsing the response.", file=log)
         exit(-1)
 
     out_messages.append(message)
-    log(message=message["content"], to_stdout=True, file=out_file)
+    log_message(message=message["content"], file=log)
 
 
-def respond(messages: list[dict[str, str]], out_file: TextIO) -> None:
-    log_section(role="AI", to_stdout=True, file=out_file)
+def respond(messages: list[dict[str, str]], log: TextIO) -> None:
+    log_section(role="AI", file=log)
     response = send_request(messages=messages)
-    consume_response(response=response, out_messages=messages, out_file=out_file)
+    consume_response(response=response, out_messages=messages, log=log)
 
 
 def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
@@ -127,23 +124,25 @@ def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
         out.append({"role": "user", "content": prompt})
 
 
+def init_conversation_log(file: TextIO):
+    file.write("\n## " + datetime.now().strftime("[%Y/%m/%d %H:%M:%S] ") + user_input[:100].replace("\n", ""))
+    file.write("\n\n---\n### User\n" + user_input + "\n\n")
+
+
 if __name__ == "__main__":
     conversation = [{"role": "system", "content": SYSTEM_MESSAGE}]
     user_input = ''
-    log_file = None
+    log_file = create_log_file()
 
     if len(sys.argv) > 1:
         user_input = ' '.join(sys.argv[1:])
     else:
-        user_input = get_user_input(should_log_section=True, out_file=io.StringIO())
+        user_input = get_user_input(log=io.StringIO())
 
-    log_file = create_log_file(first_message=user_input)
-    log_section(role="User", to_stdout=False, file=log_file)
-    log(message=user_input + "\n", to_stdout=False, file=log_file)
-
+    init_conversation_log(file=log_file)
     add_prompt_to_conversation(prompt=user_input, out=conversation)
-    respond(messages=conversation, out_file=log_file)
+    respond(messages=conversation, log=log_file)
 
     while True:
-        add_prompt_to_conversation(get_user_input(should_log_section=True, out_file=log_file), out=conversation)
-        respond(messages=conversation, out_file=log_file)
+        add_prompt_to_conversation(get_user_input(log=log_file), out=conversation)
+        respond(messages=conversation, log=log_file)

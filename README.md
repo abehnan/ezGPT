@@ -35,7 +35,7 @@ You can prompt gpt direcly from your terminal by preprending your prompt with `g
 $ gpt what is the average lifespan of a chimpanzee
 
 ---
-## AI
+### AI
 ---
 The average lifespan of a chimpanzee is between 40 to 50 years in the wild, and up to 60 years in captivity.
 ```
@@ -52,7 +52,7 @@ By default, `ezGPT` will send the request once three empty lines have been enter
 $ gpt
 
 ---
-## User
+### User
 ---
 please
 print
@@ -61,12 +61,12 @@ hello world
 
 
 ---
-## AI
+### AI
 ---
 Hello World
 
 ---
-## User
+### User
 ---
 change the
 second word to 'GPT'
@@ -74,7 +74,7 @@ second word to 'GPT'
 
 
 ---
-## AI
+### AI
 ---
 Hello GPT
 ```
@@ -86,7 +86,7 @@ Start any prompt with `-c` in order to optimize the prompt for code.
 ```commandline
 $ gpt -c convert current datetime to string in rust
 ---
-## AI
+### AI
 ---
 use chrono::{DateTime, Local};
 
@@ -115,4 +115,4 @@ The following values are configurable by changing the values in the script:
 
 ## Logging
 
-All conversations are stored in `/path/to/cloned/repository/logs` as separate markdown files.
+All conversations are stored in `/path/to/cloned/repository/logs/log.md`.
