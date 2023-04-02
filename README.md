@@ -9,8 +9,8 @@ This project was designed with simplicity in mind and is meant to be easily cust
 
 ## Requirements
 
-- Python 3
-- pip
+- `Python 3.10` or newer
+- `pip`
 
 ## Setup
 
