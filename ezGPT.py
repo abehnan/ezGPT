@@ -52,7 +52,6 @@ def log_section(role: str, file: TextIO) -> None:
 
 
 def get_user_input(log: TextIO) -> str:
-    log_message(message="\n", file=log)
     log_section(role="User", file=log)
     result = ""
     empty_count = 0
@@ -107,7 +106,7 @@ def consume_response(response: requests.Response, messages: list[dict[str, str]]
         exit(-1)
 
     messages.append(message)
-    log_message(message=message["content"], file=log)
+    log_message(message=message["content"] + "\n", file=log)
 
 
 def respond(messages: list[dict[str, str]], log: TextIO) -> None:

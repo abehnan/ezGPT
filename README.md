@@ -33,7 +33,6 @@ You can prompt gpt direcly from your terminal by preprending your prompt with `g
 
 ```
 $ gpt what is the average lifespan of a chimpanzee
-
 ---
 ### AI
 ---
@@ -50,7 +49,6 @@ By default, `ezGPT` will send the request once three empty lines have been enter
 
 ```
 $ gpt
-
 ---
 ### User
 ---
