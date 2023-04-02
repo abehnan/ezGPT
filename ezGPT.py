@@ -27,17 +27,13 @@ Code:"""
 
 
 def create_log_file(first_message: str) -> TextIO:
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-
-    if not os.path.exists(script_dir + "/logs"):
-        os.makedirs("logs")
-
     file_name = first_message[:50]
     file_name = "".join([c for c in file_name if c.isalpha() or c.isdigit() or c == ' ']).rstrip()
     file_name = file_name.replace(' ', '_')
     now = datetime.now()
     file_name = now.strftime("%Y_%m_%d__%H_%M_%S_") + file_name + ".md"
 
+    script_dir = os.path.dirname(os.path.realpath(__file__))
     file = open(script_dir + '/logs/' + file_name, "a")
     file.write("# " + now.strftime("[%Y/%m/%d] ") + first_message[:100].replace("\n", "") + "\n")
     return file
