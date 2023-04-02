@@ -123,7 +123,7 @@ def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
 
 
 def init_conversation_log(file: TextIO):
-    file.write("\n## " + datetime.now().strftime("[%Y/%m/%d %H:%M:%S] ") + user_input[:100].replace("\n", ""))
+    file.write("\n---\n## " + datetime.now().strftime("[%Y/%m/%d %H:%M:%S] ") + user_input[:100].replace("\n", ""))
     file.write("\n\n---\n### User\n" + user_input + "\n\n")
 
 
