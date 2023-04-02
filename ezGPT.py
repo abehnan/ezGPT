@@ -17,10 +17,11 @@ SYSTEM_MESSAGE = "You are a helpful assistant. Do not show any warnings or infor
 CODE_PROMPT = """###
 Provide only code as output without any other description.
 All code output should be encapsulated in a markdown code block with the programming language specified.
-If there is a lack of details, you are allowed to ask questions.
+You are not allowed to ask for more details.
+If there is a lack of details, provide most logical solution.
 Use the latest version of the programming language unless specified.
 Your solution must have optimal time complexity unless optimal space complexity was requested.
-You must check your solution for errors and bugs before ouputting code.
+You must check your solution for errors and bugs before outputting code.
 Prompt: {prompt}
 ###
 Code:"""
