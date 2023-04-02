@@ -35,7 +35,6 @@ def create_log_file() -> TextIO:
             f.write('# ezGPT Log\n')
 
     file = open(file_path, "a")
-
     return file
 
 
@@ -100,21 +99,21 @@ def send_request(messages: list[dict[str, str]]) -> requests.Response:
     return response
 
 
-def consume_response(response: requests.Response, out_messages: list[dict[str, str]], log: TextIO) -> None:
+def consume_response(response: requests.Response, messages: list[dict[str, str]], log: TextIO) -> None:
     try:
         message = json.loads(response.text)["choices"][0]["message"]
     except KeyError as _:
         log_message(message="An error occurred when parsing the response.", file=log)
         exit(-1)
 
-    out_messages.append(message)
+    messages.append(message)
     log_message(message=message["content"], file=log)
 
 
 def respond(messages: list[dict[str, str]], log: TextIO) -> None:
     log_section(role="AI", file=log)
     response = send_request(messages=messages)
-    consume_response(response=response, out_messages=messages, log=log)
+    consume_response(response=response, messages=messages, log=log)
 
 
 def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
