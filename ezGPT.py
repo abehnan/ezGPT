@@ -143,5 +143,5 @@ if __name__ == "__main__":
     respond(messages=conversation, log=log_file)
 
     while True:
-        add_prompt_to_conversation(get_user_input(log=log_file), out=conversation)
+        add_prompt_to_conversation(prompt=get_user_input(log=log_file), out=conversation)
         respond(messages=conversation, log=log_file)
