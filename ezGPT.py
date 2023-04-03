@@ -136,23 +136,32 @@ class EzGPT:
     def init_conversation_log(prompt: str, file: TextIO):
         file.write("\n---\n## " + EzGPT.current_datetime().strftime("[%Y/%m/%d %H:%M:%S] ")
                    + prompt[:100].replace("\n", ""))
-        file.write("\n\n---\n### User\n" + prompt.rstrip() + "\n")
+        file.write("\n\n---\n### User\n" + prompt.rstrip() + "\n\n")
+
+    @staticmethod
+    def run_conversation(conversation: list[dict[str, str]], log: TextIO) -> bool:
+        EzGPT.add_prompt_to_conversation(prompt=EzGPT.get_user_input(log=log), out=conversation)
+        EzGPT.respond(messages=conversation, log=log)
+        return True
+
+    @staticmethod
+    def run(args: list[str]) -> None:
+        conversation = [{"role": "system", "content": SYSTEM_MESSAGE}]
+        log_file = EzGPT.create_log_file()
+
+        if len(args) > 1:
+            user_input = ' '.join(args[1:])
+        else:
+            user_input = EzGPT.get_user_input(log=io.StringIO())
+
+        EzGPT.init_conversation_log(prompt=user_input, file=log_file)
+        EzGPT.add_prompt_to_conversation(prompt=user_input, out=conversation)
+        EzGPT.respond(messages=conversation, log=log_file)
+        keep_going = True
+
+        while keep_going:
+            keep_going = EzGPT.run_conversation(conversation=conversation, log=log_file)
 
 
 if __name__ == "__main__":
-    conversation = [{"role": "system", "content": SYSTEM_MESSAGE}]
-    user_input = ''
-    log_file = EzGPT.create_log_file()
-
-    if len(sys.argv) > 1:
-        user_input = ' '.join(sys.argv[1:])
-    else:
-        user_input = EzGPT.get_user_input(log=io.StringIO())
-
-    EzGPT.init_conversation_log(prompt=user_input, file=log_file)
-    EzGPT.add_prompt_to_conversation(prompt=user_input, out=conversation)
-    EzGPT.respond(messages=conversation, log=log_file)
-
-    while True:
-        EzGPT.add_prompt_to_conversation(prompt=EzGPT.get_user_input(log=log_file), out=conversation)
-        EzGPT.respond(messages=conversation, log=log_file)
+    EzGPT.run(sys.argv)

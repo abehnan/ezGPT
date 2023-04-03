@@ -102,7 +102,7 @@ class TestEzGPT:
         log = io.StringIO()
         user_input = 'Test input'
         EzGPT.init_conversation_log(prompt=user_input, file=log)
-        assert log.getvalue() == '\n---\n## [2023/04/03 10:38:43] Test input\n\n---\n### User\nTest input\n'
+        assert log.getvalue() == '\n---\n## [2023/04/03 10:38:43] Test input\n\n---\n### User\nTest input\n\n'
 
     @patch('ezGPT.EzGPT.prompt_for_input', side_effect=["Test input", "", "", ""])
     def test_get_user_input(self, _):
