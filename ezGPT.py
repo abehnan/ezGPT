@@ -136,7 +136,7 @@ class EzGPT:
     def init_conversation_log(prompt: str, file: TextIO):
         file.write("\n---\n## " + EzGPT.current_datetime().strftime("[%Y/%m/%d %H:%M:%S] ")
                    + prompt[:100].replace("\n", ""))
-        file.write("\n\n---\n### User\n" + prompt + "\n\n")
+        file.write("\n\n---\n### User\n" + prompt.rstrip() + "\n")
 
 
 if __name__ == "__main__":
