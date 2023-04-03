@@ -114,3 +114,71 @@ class TestEzGPT:
         user_input = EzGPT.get_user_input(log=log)
         assert user_input == "Test input\n\n\n"
         assert log.getvalue() == "---\n### User\nTest input\n"
+
+    @patch('ezGPT.EzGPT.current_datetime',
+           return_value=datetime(year=2023, month=4, day=3, hour=10, minute=38, second=43))
+    @patch('ezGPT.EzGPT.prompt_for_input', side_effect=["Test input", "", "", ""])
+    @patch('ezGPT.EzGPT.run_conversation', side_effect=[False])
+    @patch('ezGPT.EzGPT.create_log_file')
+    @patch('ezGPT.EzGPT.send_request')
+    def test_run_with_args(self,
+                           mock_send_request,
+                           mock_create_log_file,
+                           mock_run_conversation,
+                           mock_prompt_for_input,
+                           _):
+        log = io.StringIO()
+        mock_create_log_file.return_value = log
+        mock_send_request.return_value = requests.Response()
+        mock_send_request.return_value._content = \
+            '{"choices": [{"message": {"role": "AI", "content": "Hello"}}]}'.encode('utf-8')
+        EzGPT.run(["ezGPT", "testing", "some", "args"])
+        mock_prompt_for_input.assert_not_called()
+        mock_send_request.assert_called_once()
+        mock_run_conversation.assert_called_once()
+        assert log.getvalue() == '\n' \
+                                 '---\n' \
+                                 '## [2023/04/03 10:38:43] testing some args\n' \
+                                 '\n' \
+                                 '---\n' \
+                                 '### User\n' \
+                                 'testing some args\n' \
+                                 '\n' \
+                                 '---\n' \
+                                 '### AI\n' \
+                                 'Hello\n' \
+                                 '\n'
+
+    @patch('ezGPT.EzGPT.current_datetime',
+           return_value=datetime(year=2023, month=4, day=3, hour=10, minute=38, second=43))
+    @patch('ezGPT.EzGPT.prompt_for_input', side_effect=["Test input", "", "", ""])
+    @patch('ezGPT.EzGPT.run_conversation', side_effect=[False])
+    @patch('ezGPT.EzGPT.create_log_file')
+    @patch('ezGPT.EzGPT.send_request')
+    def test_run_without_args(self,
+                              mock_send_request,
+                              mock_create_log_file,
+                              mock_run_conversation,
+                              mock_prompt_for_input,
+                              _):
+        log = io.StringIO()
+        mock_create_log_file.return_value = log
+        mock_send_request.return_value = requests.Response()
+        mock_send_request.return_value._content = \
+            '{"choices": [{"message": {"role": "AI", "content": "Hello"}}]}'.encode('utf-8')
+        EzGPT.run([])
+        mock_prompt_for_input.assert_called()
+        mock_send_request.assert_called_once()
+        mock_run_conversation.assert_called_once()
+        assert log.getvalue() == '\n' \
+                                 '---\n' \
+                                 '## [2023/04/03 10:38:43] Test input\n' \
+                                 '\n' \
+                                 '---\n' \
+                                 '### User\n' \
+                                 'Test input\n' \
+                                 '\n' \
+                                 '---\n' \
+                                 '### AI\n' \
+                                 'Hello\n' \
+                                 '\n'
