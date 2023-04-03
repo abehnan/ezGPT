@@ -42,9 +42,11 @@ class TestEzGPT:
             os.environ['OPENAI_API_KEY'] = 'fake_api_key'
 
         messages = [{"role": "user", "content": "Hi"}]
+
         with patch('requests.post') as mock_post:
             mock_post.return_value.status_code = 200
             EzGPT.send_request(messages=messages)
+
         mock_post.assert_called_once()
         mock_post.assert_called_with(
             url='https://api.openai.com/v1/chat/completions',
@@ -65,12 +67,14 @@ class TestEzGPT:
 
     def test_respond(self):
         messages = [{"role": "user", "content": "Hi"}]
+
         with patch('ezGPT.EzGPT.send_request') as mock_send_request:
             mock_send_request.return_value = requests.Response()
             mock_send_request.return_value._content = \
                 '{"choices": [{"message": {"role": "AI", "content": "Hello"}}]}'.encode('utf-8')
             log = io.StringIO()
             EzGPT.respond(messages=messages, log=log)
+
         mock_send_request.assert_called_once()
         assert len(messages) == 2
         assert messages[1]['role'] == 'AI'
