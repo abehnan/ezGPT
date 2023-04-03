@@ -84,7 +84,7 @@ class EzGPT:
 
             result += line + "\n"
 
-        log.write(result.rstrip() + '\n')
+        log.write(result.rstrip() + '\n\n')
         return result
 
     @staticmethod

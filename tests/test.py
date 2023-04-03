@@ -113,7 +113,7 @@ class TestEzGPT:
         log = io.StringIO()
         user_input = EzGPT.get_user_input(log=log)
         assert user_input == "Test input\n\n\n"
-        assert log.getvalue() == "---\n### User\nTest input\n"
+        assert log.getvalue() == "---\n### User\nTest input\n\n"
 
     @patch('ezGPT.EzGPT.current_datetime',
            return_value=datetime(year=2023, month=4, day=3, hour=10, minute=38, second=43))
