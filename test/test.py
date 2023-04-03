@@ -109,4 +109,4 @@ class TestEzGPT:
         log = io.StringIO()
         user_input = EzGPT.get_user_input(log=log)
         assert user_input == "Test input\n\n\n"
-        assert log.getvalue() == "---\n### User\nTest input\n\n\n\n"
+        assert log.getvalue() == "---\n### User\nTest input\n"
