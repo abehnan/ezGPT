@@ -97,7 +97,7 @@ fn main() {
 
 ### Exiting
 
-You can exit the program by entering `stop`, `exit`, or `\q`.
+You can exit the program by entering `quit`, `exit`, or `\q`.
 This is configurable through the `EXIT_COMMANDS` variable.
 
 ## Configuration
