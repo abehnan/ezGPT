@@ -27,121 +27,132 @@ Prompt: {prompt}
 Code:"""
 
 
-def create_log_file() -> TextIO:
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    file_path = script_dir + '/logs/' + "log.md"
+class EzGPT:
+    @staticmethod
+    def prompt_for_input() -> str:
+        return input()
 
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as f:
-            f.write('# ezGPT Log\n')
+    @staticmethod
+    def current_datetime() -> datetime:
+        return datetime.now()
 
-    file = open(file_path, "a")
-    return file
+    @staticmethod
+    def create_log_file() -> TextIO:
+        script_dir = os.path.dirname(os.path.realpath(__file__))
+        file_path = script_dir + '/logs/' + "log.md"
 
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as f:
+                f.write('# ezGPT Log\n')
 
-def log_message(message: str, file: TextIO) -> None:
-    print(message)
+        file = open(file_path, "a")
+        return file
 
-    if file:
-        file.write(message + '\n')
+    @staticmethod
+    def log_message(message: str, file: TextIO) -> None:
+        print(message)
 
+        if file:
+            file.write(message + '\n')
 
-def log_section(role: str, file: TextIO) -> None:
-    log_message(message="---", file=file)
-    log_message(message="### " + role, file=file)
-    print("---")  # looks nicer without bottom separator in markdown viewers
+    @staticmethod
+    def log_section(role: str, file: TextIO) -> None:
+        EzGPT.log_message(message="---", file=file)
+        EzGPT.log_message(message="### " + role, file=file)
+        print("---")  # looks nicer without bottom separator in markdown viewers
 
+    @staticmethod
+    def get_user_input(log: TextIO) -> str:
+        EzGPT.log_section(role="User", file=log)
+        result = ""
+        empty_count = 0
 
-def get_user_input(log: TextIO) -> str:
-    log_section(role="User", file=log)
-    result = ""
-    empty_count = 0
+        while True:
+            line = EzGPT.prompt_for_input()
 
-    while True:
-        line = input()
+            if line in EXIT_COMMANDS:
+                log.write(line + '\n')
+                exit(0)
 
-        if line in EXIT_COMMANDS:
-            log.write(line + '\n')
-            exit(0)
+            if line == "":
+                empty_count += 1
+            else:
+                empty_count = 0
 
-        if line == "":
-            empty_count += 1
+            if empty_count >= NUM_EMPTY_LINES_TO_SEND_REQUEST:
+                break
+
+            result += line + "\n"
+
+        log.write(result + '\n')
+        return result
+
+    @staticmethod
+    def create_post_data(messages: list[dict[str, str]]) -> json:
+        data = {
+            "model": MODEL,
+            "messages": messages,
+            "temperature": TEMPERATURE
+        }
+        return json.dumps(data)
+
+    @staticmethod
+    def send_request(messages: list[dict[str, str]]) -> requests.Response:
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
+        }
+        response = requests.post(
+            url="https://api.openai.com/v1/chat/completions",
+            headers=headers,
+            data=EzGPT.create_post_data(messages=messages))
+        return response
+
+    @staticmethod
+    def consume_response(response: requests.Response, messages: list[dict[str, str]], log: TextIO) -> None:
+        try:
+            message = json.loads(response.text)["choices"][0]["message"]
+        except KeyError as _:
+            EzGPT.log_message(message="An error occurred when parsing the response.", file=log)
+            exit(-1)
+
+        messages.append(message)
+        EzGPT.log_message(message=message["content"] + "\n", file=log)
+
+    @staticmethod
+    def respond(messages: list[dict[str, str]], log: TextIO) -> None:
+        EzGPT.log_section(role="AI", file=log)
+        response = EzGPT.send_request(messages=messages)
+        EzGPT.consume_response(response=response, messages=messages, log=log)
+
+    @staticmethod
+    def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
+        if prompt.startswith("-c"):
+            out.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt[2:])})
         else:
-            empty_count = 0
+            out.append({"role": "user", "content": prompt})
 
-        if empty_count >= NUM_EMPTY_LINES_TO_SEND_REQUEST:
-            break
-
-        result += line + "\n"
-
-    log.write(result + '\n')
-    return result
-
-
-def create_post_data(messages: list[dict[str, str]]) -> json:
-    data = {
-        "model": MODEL,
-        "messages": messages,
-        "temperature": TEMPERATURE
-    }
-    return json.dumps(data)
-
-
-def send_request(messages: list[dict[str, str]]) -> requests.Response:
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + os.environ.get('OPENAI_API_KEY')
-    }
-    response = requests.post(
-        url="https://api.openai.com/v1/chat/completions",
-        headers=headers,
-        data=create_post_data(messages=messages))
-    return response
-
-
-def consume_response(response: requests.Response, messages: list[dict[str, str]], log: TextIO) -> None:
-    try:
-        message = json.loads(response.text)["choices"][0]["message"]
-    except KeyError as _:
-        log_message(message="An error occurred when parsing the response.", file=log)
-        exit(-1)
-
-    messages.append(message)
-    log_message(message=message["content"] + "\n", file=log)
-
-
-def respond(messages: list[dict[str, str]], log: TextIO) -> None:
-    log_section(role="AI", file=log)
-    response = send_request(messages=messages)
-    consume_response(response=response, messages=messages, log=log)
-
-
-def add_prompt_to_conversation(prompt: str, out: list[dict[str, str]]) -> None:
-    if prompt.startswith("-c"):
-        out.append({"role": "user", "content": CODE_PROMPT.format(prompt=prompt[2:])})
-    else:
-        out.append({"role": "user", "content": prompt})
-
-
-def init_conversation_log(file: TextIO):
-    file.write("\n---\n## " + datetime.now().strftime("[%Y/%m/%d %H:%M:%S] ") + user_input[:100].replace("\n", ""))
-    file.write("\n\n---\n### User\n" + user_input + "\n\n")
+    @staticmethod
+    def init_conversation_log(prompt: str, file: TextIO):
+        file.write("\n---\n## " + EzGPT.current_datetime().strftime("[%Y/%m/%d %H:%M:%S] ")
+                   + prompt[:100].replace("\n", ""))
+        file.write("\n\n---\n### User\n" + prompt + "\n\n")
 
 
 if __name__ == "__main__":
     conversation = [{"role": "system", "content": SYSTEM_MESSAGE}]
     user_input = ''
-    log_file = create_log_file()
+    log_file = EzGPT.create_log_file()
 
     if len(sys.argv) > 1:
         user_input = ' '.join(sys.argv[1:])
     else:
-        user_input = get_user_input(log=io.StringIO())
+        user_input = EzGPT.get_user_input(log=io.StringIO())
 
-    init_conversation_log(file=log_file)
-    add_prompt_to_conversation(prompt=user_input, out=conversation)
-    respond(messages=conversation, log=log_file)
+    EzGPT.init_conversation_log(prompt=user_input, file=log_file)
+    EzGPT.add_prompt_to_conversation(prompt=user_input, out=conversation)
+    EzGPT.respond(messages=conversation, log=log_file)
 
     while True:
-        add_prompt_to_conversation(prompt=get_user_input(log=log_file), out=conversation)
-        respond(messages=conversation, log=log_file)
+        EzGPT.add_prompt_to_conversation(prompt=EzGPT.get_user_input(log=log_file), out=conversation)
+        EzGPT.respond(messages=conversation, log=log_file)
