@@ -1,7 +1,7 @@
 # ezGPT
 Welcome to the ezGPT GitHub project!
 
-This is a terminal-based chatbot that uses GPT technology to power its conversations.
+This is a terminal-based chatbot that uses the chatGPT API to power its conversations.
 
 The purpose of this project is to provide users with a simple and easy-to-use chatbot that can help them in their day-to-day tasks or even just provide some fun conversation.
 
